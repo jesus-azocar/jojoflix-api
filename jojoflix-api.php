@@ -12,3 +12,6 @@
 
 require_once "core/cpts.php";
 require_once "core/api-endpoints.php";
+
+
+register_activation_hook( __FILE__ , '\Jojoflix\Core\create_tables' );
