@@ -96,7 +96,9 @@ function get_last_comments( $part_id = null ){
             $part_id );
     }else{
         $stmt = $wpdb->prepare( 
-            "SELECT the_content FROM $votes ORDER BY created_at DESC LIMIT 3" 
+            "SELECT the_content,post_title,created_at FROM $votes 
+            INNER JOIN {$wpdb->posts} p ON p.ID= $votes.part_id 
+            ORDER BY created_at DESC LIMIT 2" 
         );
     }
     $r = $wpdb->get_results( $stmt );
@@ -114,6 +116,17 @@ function get_best_parts(){
             ORDER BY avgvotes DESC LIMIT 3" );
 
     $r = $wpdb->get_results( $stmt );
+
+    foreach ($r as $key => $value) {
+        
+        $thumbnail = get_the_post_thumbnail_url( $value->part_id );
+
+        if(!$thumbnail){
+            $thumbnail = 'https://i.pinimg.com/736x/45/12/4b/45124b492779d3e564c841f979dc8b03.jpg';
+        }
+        $value->thumbnail = $thumbnail;
+    }
+    
     return $r;
 }
 
@@ -128,6 +141,17 @@ function get_most_commented_parts(){
             ORDER BY totalvotes DESC LIMIT 3" );
 
     $r = $wpdb->get_results( $stmt );
+
+    foreach ($r as $key => $value) {
+        
+        $thumbnail = get_the_post_thumbnail_url( $value->part_id );
+
+        if(!$thumbnail){
+            $thumbnail = 'https://i.pinimg.com/736x/45/12/4b/45124b492779d3e564c841f979dc8b03.jpg';
+        }
+        $value->thumbnail = $thumbnail;
+    }
+
     return $r;
 }
 
